@@ -1,2 +1,17 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import type { List } from '../types/lists'
+
+	let lists: List[] = []
+</script>
+
+<h1>Shopping lists</h1>
+{#if lists.length > 0}
+	<ul>
+		{#each lists as list}
+			<li>{list.id}</li>
+		{/each}
+	</ul>
+{:else}
+	<p>You don't have any shopping lists yet!</p>
+	<p>Why not <a href="/new-list">create one</a></p>
+{/if}
