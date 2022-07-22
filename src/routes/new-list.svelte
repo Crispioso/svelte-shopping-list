@@ -1,7 +1,17 @@
+<script lang="ts" context="module">
+	import { redirectIfNotLoggedIn } from '$lib/helpers'
+	import type { Load } from '@sveltejs/kit'
+
+	export const load: Load = async ({ session }) => {
+		return redirectIfNotLoggedIn(session, {})
+	}
+</script>
+
 <script lang="ts">
 	import { v4 as generateId } from 'uuid'
 	import fuzzysort from 'fuzzysort'
 	import type { Item, ListItem } from '../types/lists'
+	import { supabase } from '$lib/supabase/client'
 
 	let listItems: ListItem[] = []
 	let items: { [itemId: string]: Item } = {}
@@ -9,6 +19,9 @@
 	let newItemName: string = ''
 	let newItemQuantity: number = 1
 	let previousItemMatches: Item[] = []
+
+	const user = supabase.auth.user()
+	// console.log(user)
 
 	$: {
 		const results = fuzzysort.go(newItemName, Object.values(items), { key: 'title' })
@@ -32,10 +45,13 @@
 			},
 		}
 
-		listItems.push({
-			itemId: newId,
-			quantity: newItemQuantity,
-		})
+		listItems = [
+			...listItems,
+			{
+				itemId: newId,
+				quantity: newItemQuantity,
+			},
+		]
 
 		resetNewItemValues()
 	}

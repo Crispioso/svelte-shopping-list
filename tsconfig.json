@@ -10,5 +10,8 @@
 		"sourceMap": true,
 		"strict": true
 	},
-	"typeRoots": ["node_modules/@types", "type-definition"]
+	"typeRoots": ["node_modules/@types", "type-definition" ],
+	"paths": {
+		"$lib/*": ["lib/*"]
+	}
 }
